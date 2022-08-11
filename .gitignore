@@ -1,0 +1,12 @@
+# macos
+.DS_Store
+
+# Static assets
+static
+
+# Other custom server types
+alternate
+
+# Binary
+custom_server
+
