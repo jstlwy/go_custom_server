@@ -3,25 +3,21 @@
 package main
 
 import (
-	//"encoding/json"
 	"fmt"
 	"io/fs"
 	"log"
-	//"net"
 	"net/http"
 	"os"
-	//"path"
 	"path/filepath"
 	"regexp"
-	//"strconv"
 	"strings"
-	//"time"
 )
 
 var usedFileTypes = [...]string{
 	".html",
 	".css",
 	".js",
+	".jpg",
 }
 var expectedFileExtensions map[string]bool
 var fileCache map[string]string
@@ -64,7 +60,10 @@ func CustomServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case n == 1 && path[0] == "contact":
 		fmt.Fprint(w, "<h1>Contact</h1>")
 	case path[0] == "calculator" && n == 1:
-		http.Redirect(w, r, r.URL.Path + "/index.html", 301)
+		//http.Redirect(w, r, r.URL.Path + "/index.html", 301)
+		fallthrough
+	case path[0] == "tribute" && n == 1:
+		http.Redirect(w, r, r.URL.Path + "/index.html", http.StatusMovedPermanently)
 	default:
 		log.Printf("Not found: %s\n", r.URL.Path)
 		http.NotFound(w, r)
@@ -112,7 +111,7 @@ func init() {
 	}
 
 	log.Println("Confirming cached files:")
-	for filename, _ := range fileCache {
+	for filename := range fileCache {
 		fmt.Println(filename)
 	}
 }
